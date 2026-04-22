@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rack Eco · Carga Leve — Página de Produto</title>
+  <style>
+    :root{
+      --bg:#0c1220;
+      --card:#111a2f;
+      --muted:#9aa0a6;
+      --text:#e5e7eb;
+      --brand:#ff6100; /* Cor Laranja atualizada */
+      --brand-hover:#e05500; /* Laranja um pouco mais escuro para o hover */
+      --line:#1d2740;
+      --danger:#ef4444;
+      --radius:18px;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"}
+    .page{max-width:640px;margin:0 auto;padding-bottom:120px}
+    header{position:sticky;top:0;z-index:40;backdrop-filter: blur(8px);background:linear-gradient(180deg, rgba(12,18,32,.95), rgba(12,18,32,.7) 70%, rgba(12,18,32,0))}
+    .header-inner{display:flex;align-items:center;gap:12px;padding:14px 16px}
+    .logo{height:30px;width:auto;display:block;opacity:.95}
+    .brand-title{font-weight:600;font-size:14px;color:var(--muted)}
+    .hero{padding:16px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .hero .card{padding:18px}
+    /* Cores da badge adaptadas para o tema laranja */
+    .badge{display:inline-block;background:rgba(255,97,0,.15);color:#ff9852;border:1px solid rgba(255,97,0,.35);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.2px}
+    h1{margin:10px 0 6px;font-size:22px;line-height:1.2}
+    .subtitle{margin:0;color:var(--muted);font-size:14px}
+    .panel{margin:16px;padding:16px}
+    .panel.card{padding:14px}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media (min-width:560px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px 2px}
+    select,input[type="number"]{width:100%;padding:12px 12px;border-radius:14px;background:#0c1220;border:1px solid var(--line);color:var(--text);outline:none}
+    select:focus,input[type="number"]:focus{border-color:#334155;box-shadow:0 0 0 4px rgba(51,65,85,.35)}
+    .hint{font-size:12px;color:var(--muted)}
+    .btn{appearance:none;border:0;border-radius:14px;padding:12px 16px;font-weight:700;cursor:pointer;transition:.2s}
+    .btn-primary{background:var(--brand);color:white}
+    .btn-primary:active{transform:translateY(1px)}
+    .btn-primary:hover{background:var(--brand-hover)}
+    .section-title{margin:0 16px 8px;font-size:16px;color:#cbd5e1}
+    .table-wrap{margin:0 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    .table-scroll{overflow-x:auto}
+    table{border-collapse:collapse;min-width:720px;width:100%}
+    th,td{border-bottom:1px solid var(--line);padding:12px 10px;text-align:center}
+    th{background:#121a33;color:#cbd5e1;font-size:12px;letter-spacing:.3px}
+    tr:last-child td{border-bottom:0}
+    .remover{background:var(--danger);color:white;border:none;border-radius:999px;width:28px;height:28px;cursor:pointer}
+    .totais{margin:16px;padding:0}
+    .tot-card{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 14px}
+    .tot-row{display:flex;align-items:center;justify-content:space-between;font-size:14px;color:#cbd5e1}
+    .tot-row.small{font-size:12px;color:var(--muted)}
+    .tot-row.strong{font-weight:700}
+    /* Fundo da linha de portes adaptado ao laranja */
+    .tot-row.portes{background:rgba(255,97,0,.08);border-radius:12px;padding:10px 12px}
+    .tot-row strong{font-size:16px}
+    .sticky-bar{position:fixed;left:0;right:0;bottom:0;background:rgba(17,26,47,.95);border-top:1px solid var(--line);backdrop-filter:blur(8px)}
+    .sticky-inner{max-width:640px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 16px}
+    .sticky-total{font-weight:800}
+    .sticky-sub{font-size:12px;color:var(--muted)}
+    .mt-8{margin-top:8px}
+    .mt-12{margin-top:12px}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="header-inner">
+        <a href="https://www.agraracks.com/" target="_blank" rel="noopener" aria-label="Ir para o site da AgraRacks"><img class="logo" src="logo agraracks - 500x150px (2).png" alt="AgraRacks" /></a>
+        <div class="brand-title">Rack Eco · Carga Leve</div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="card">
+        <span class="badge">Carga leve</span>
+        <h1>Rack Eco</h1>
+        <p class="subtitle">Simule o seu módulo, adicione ao orçamento e veja os totais com portes e IVA.</p>
+      </div>
+    </section>
+
+    <section class="panel card" aria-labelledby="formTitle">
+      <h2 id="formTitle" class="visualmente-oculto" style="position:absolute;left:-9999px">Configuração do produto</h2>
+      <div class="grid">
+        <div>
+          <label for="moduleType">Tipo de módulo</label>
+          <select id="moduleType">
+            <option value="2">Individual</option>
+            <option value="1">Seguinte</option>
+          </select>
+        </div>
+        <div>
+          <label for="altura">Altura (m)</label>
+          <select id="altura">
+            <option value="1000">1.00</option>
+            <option value="1200">1.20</option>
+            <option value="1400">1.40</option>
+            <option value="1600">1.60</option>
+            <option value="1800">1.80</option>
+            <option value="2000">2.00</option>
+            <option value="2200">2.20</option>
+            <option value="2400">2.40</option>
+            <option value="2600">2.60</option>
+            <option value="2800">2.80</option>
+            <option value="3000">3.00</option>
+          </select>
+        </div>
+        <div>
+          <label for="comprimento">Comprimento (m)</label>
+          <select id="comprimento">
+            <option value="1000">1.00</option>
+            <option value="1250">1.25</option>
+            <option value="1500">1.50</option>
+          </select>
+        </div>
+        <div>
+          <label for="largura">Largura (m)</label>
+          <select id="largura">
+            <option value="300">0.30</option>
+            <option value="340">0.34</option>
+            <option value="400">0.40</option>
+            <option value="500">0.50</option>
+            <option value="600">0.60</option>
+            <option value="680">0.68</option>
+            <option value="800">0.80</option>
+            <option value="1000">1.00</option>
+          </select>
+        </div>
+        <div>
+          <label for="qtdNiveis">Quantidade de níveis</label>
+          <input id="qtdNiveis" type="number" min="3" value="3" />
+          <div class="hint mt-8"><strong>Capacidade por nível:</strong> <span id="capacidadeNivelInfo" style="color:var(--brand);font-weight:bold;">--</span> kg</div>
+        </div>
+        <div>
+          <label for="qtdModulos">Quantidade de módulos</label>
+          <input id="qtdModulos" type="number" min="1" value="1" />
+        </div>
+      </div>
+      <button class="btn btn-primary mt-12" type="button" onclick="addToList()">Adicionar ao orçamento</button>
+    </section>
+
+    <h3 class="section-title">Itens adicionados</h3>
+    <div class="table-wrap card">
+      <div class="table-scroll">
+        <table id="orcamentoTable" role="table" aria-label="Itens do orçamento">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Altura</th>
+              <th>Compr.</th>
+              <th>Largura</th>
+              <th>Níveis</th>
+              <th>Cap.(kg/nível)</th>
+              <th>Qtd</th>
+              <th>Preço Un.(€)</th>
+              <th>Total (€)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3 class="section-title">Totais</h3>
+    <section class="totais card">
+      <div class="tot-card">
+        <div class="tot-row small"><span>Peso Total</span><span id="totalPeso">0.00</span> </div>
+        <div class="tot-row"><span>Subtotal</span><strong>€ <span id="totalPreco">0.00</span></strong></div>
+        <div class="tot-row portes"><span>Portes (s/ IVA)</span><strong>€ <span id="portesSemIva">0.00</span></strong></div>
+        <div class="tot-row"><span>IVA (23%)</span><strong>€ <span id="totalIVA">0.00</span></strong></div>
+        <div class="tot-row strong"><span>Total com IVA</span><strong>€ <span id="totalComIVA">0.00</span></strong></div>
+      </div>
+    </section>
+
+    <div class="sticky-bar">
+      <div class="sticky-inner">
+        <div>
+          <div class="sticky-total">Total: € <span id="totalComIVASummary">0.00</span></div>
+          <div class="sticky-sub">Portes: € <span id="portesSemIvaSummary">0.00</span> (s/ IVA)</div>
+        </div>
+        <button class="btn btn-primary" type="button" onclick="enviarOrcamento()">Avançar com orçamento</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // TABELA DE PORTES (Já atualizada em +9,5% com teto de 2 casas decimais)
+  const FRETE_RULES = [
+    {min:0.0, max:40.0, price:17.98},
+    {min:41.0, max:50.0, price:19.97},
+    {min:51.0, max:60.0, price:24.19},
+    {min:61.0, max:80.0, price:29.62},
+    {min:81.0, max:100.0, price:37.96},
+    {min:101.0, max:125.0, price:47.57},
+    {min:126.0, max:150.0, price:55.87},
+    {min:151.0, max:175.0, price:60.64},
+    {min:176.0, max:200.0, price:69.68},
+    {min:201.0, max:250.0, price:71.32},
+    {min:251.0, max:300.0, price:81.88},
+    {min:301.0, max:350.0, price:89.76},
+    {min:351.0, max:400.0, price:97.80},
+    {min:401.0, max:450.0, price:108.45},
+    {min:451.0, max:500.0, price:122.92},
+    {min:501.0, max:600.0, price:132.39},
+    {min:601.0, max:700.0, price:146.41},
+    {min:701.0, max:800.0, price:174.15},
+    {min:801.0, max:900.0, price:178.59},
+    {min:901.0, max:1000.0, price:197.67},
+    {min:1001.0, max:2499.0, pricePerKg:0.27},
+    {min:2500.0, max:Infinity, pricePerKg:0.23}
+  ];
+
+  function calcularPortesBaseKg(totalKg){
+    for(const r of FRETE_RULES){
+      if(totalKg >= r.min && totalKg <= r.max){
+        if(r.price !== undefined) return r.price;
+        if(r.pricePerKg !== undefined) return totalKg * r.pricePerKg;
+      }
+    }
+    return 0;
+  }
+
+  // TABELA DE CAPACIDADES Carga Leve (Refinada pelo PDF)
+  const capNivel = {
+    "1000": {"300": 136, "340": 136, "400": 136, "500": 182, "600": 182, "680": 182, "800": 198, "1000": 198},
+    "1250": {"300": 114, "340": 114, "400": 114, "500": 152, "600": 152, "680": 152, "800": 178, "1000": 178},
+    "1500": {"300": 83, "340": 83, "400": 83, "500": 110, "600": 110, "680": 110, "800": 131, "1000": 131}
+  };
+
+  function atualizarCapacidadeUI() {
+    const comp = document.getElementById('comprimento').value;
+    const larg = document.getElementById('largura').value;
+    const capacidade = (capNivel[comp] && capNivel[comp][larg]) || '--';
+    document.getElementById('capacidadeNivelInfo').innerText = capacidade;
+  }
+  
+  // Atualiza a capacidade quando se altera o menu
+  document.getElementById('comprimento').addEventListener('change', atualizarCapacidadeUI);
+  document.getElementById('largura').addEventListener('change', atualizarCapacidadeUI);
+  window.addEventListener('DOMContentLoaded', atualizarCapacidadeUI);
+
+  // PESOS (mantidos intactos)
+  const bastPeso = {"1000": 1.68, "1200": 2.16, "1400": 2.38, "1600": 2.64, "1800": 3.0, "2000": 3.34, "2200": 3.68, "2400": 4.0, "2600": 4.34, "2800": 4.66, "3000": 5.0};
+  const nivPeso  = {"1000": {"300": 2.15, "340": 2.19, "400": 2.25, "500": 2.94, "600": 3.04, "680": 3.12, "800": 3.93, "1000": 5.38}, "1250": {"300": 2.6, "340": 2.64, "400": 2.7, "500": 3.54, "600": 3.64, "680": 3.72, "800": 4.68, "1000": 6.28}, "1500": {"300": 3.03, "340": 3.07, "400": 3.13, "500": 4.12, "600": 4.22, "680": 4.3, "800": 5.41, "1000": 7.16}};
+
+  // PREÇOS JÁ ATUALIZADOS EM +9,5% (e arredondados para cima na 2ª casa decimal)
+  const bastPreco= {"1000": 9.02, "1200": 10.24, "1400": 11.45, "1600": 12.76, "1800": 14.04, "2000": 15.26, "2200": 16.48, "2400": 17.78, "2600": 19.00, "2800": 20.26, "3000": 21.51};
+  const nivPreco = {
+    "1000": {"300": 11.57, "340": 11.78, "400": 12.03, "500": 14.46, "600": 14.95, "680": 15.39, "800": 17.88, "1000": 23.07},
+    "1250": {"300": 12.93, "340": 13.16, "400": 13.41, "500": 16.27, "600": 16.74, "680": 17.19, "800": 20.09, "1000": 25.76},
+    "1500": {"300": 14.23, "340": 14.50, "400": 14.72, "500": 18.02, "600": 18.60, "680": 18.98, "800": 22.23, "1000": 28.46}
+  };
+
+  let totalPeso = 0; let totalPreco = 0;
+
+  function calcularPortes(){
+    return calcularPortesBaseKg(totalPeso);
+  }
+
+  function addToList(){
+    const mod  = parseInt(document.getElementById('moduleType').value);
+    const tipo = mod === 2 ? 'Individual' : 'Seguinte';
+    const alt  = document.getElementById('altura').value;
+    const comp = document.getElementById('comprimento').value;
+    const larg = document.getElementById('largura').value;
+    const niveis = parseInt(document.getElementById('qtdNiveis').value);
+    const qtd    = parseInt(document.getElementById('qtdModulos').value);
+
+    // Identificar a capacidade atual
+    const capacidade = (capNivel[comp] && capNivel[comp][larg]) || '--';
+
+    const pesoB = (bastPeso[alt]) || 0;
+    const pesoN = (nivPeso[comp] && nivPeso[comp][larg]) || 0;
+    const precoB = (bastPreco[alt]) || 0;
+    const precoN = (nivPreco[comp] && nivPreco[comp][larg]) || 0;
+
+    const pesoItem = ((mod * pesoB) + (niveis * pesoN));
+    const precoUnit = (mod * precoB) + (niveis * precoN);
+    const precoTotalItem = precoUnit * qtd;
+
+    totalPeso += pesoItem * qtd;
+    totalPreco += precoTotalItem;
+
+    const tbody = document.querySelector('#orcamentoTable tbody');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${tipo}</td>
+      <td>${(alt/1000).toFixed(2)}m</td>
+      <td>${(comp/1000).toFixed(2)}m</td>
+      <td>${(larg/1000).toFixed(2)}m</td>
+      <td>${niveis}</td>
+      <td>${capacidade}</td>
+      <td>${qtd}</td>
+      <td>${precoUnit.toFixed(2)}</td>
+      <td>${precoTotalItem.toFixed(2)}</td>
+      <td><button class="remover" aria-label="Remover item" onclick='removerItem(this, ${pesoItem*qtd}, ${precoTotalItem})'>×</button></td>`;
+    tbody.appendChild(tr);
+
+    atualizarTotais();
+  }
+
+  function removerItem(btn, peso, preco){
+    const row = btn.closest('tr');
+    row.parentNode.removeChild(row);
+    totalPeso -= peso; totalPreco -= preco;
+    atualizarTotais();
+  }
+
+  function atualizarTotais(){
+    const portesBase = calcularPortes();
+    const subtotal = totalPreco;
+    const baseParaIVA = subtotal + portesBase;
+    const iva = baseParaIVA * 0.23;
+    const totalComIva = baseParaIVA + iva;
+
+    document.getElementById('totalPeso').innerText = totalPeso.toFixed(2);
+    document.getElementById('totalPreco').innerText = subtotal.toFixed(2);
+    document.getElementById('portesSemIva').innerText = portesBase.toFixed(2);
+    document.getElementById('portesSemIvaSummary').innerText = portesBase.toFixed(2);
+    document.getElementById('totalIVA').innerText = iva.toFixed(2);
+    document.getElementById('totalComIVA').innerText = totalComIva.toFixed(2);
+    document.getElementById('totalComIVASummary').innerText = totalComIva.toFixed(2);
+  }
+
+  function enviarOrcamento() {
+    // Pega as linhas da tabela e converte num texto limpo para o e-mail
+    const rows = document.querySelectorAll('#orcamentoTable tbody tr');
+    let linhasTexto = [];
+    
+    if(rows.length === 0) {
+      alert("Adicione pelo menos um item ao orçamento.");
+      return;
+    }
+
+    rows.forEach(tr => {
+      const tds = tr.querySelectorAll('td');
+      const tipo = tds[0].innerText;
+      const alt = tds[1].innerText;
+      const comp = tds[2].innerText;
+      const larg = tds[3].innerText;
+      const niveis = tds[4].innerText;
+      const capacidade = tds[5].innerText;
+      const qtd = tds[6].innerText;
+      const precoUnit = tds[7].innerText;
+
+      linhasTexto.push(`${qtd}x - Módulo ${tipo} | Medidas: ${alt}A x ${comp}C x ${larg}L | ${niveis} níveis (${capacidade}kg/nível) - € ${precoUnit}/unid`);
+    });
+
+    const total = document.getElementById('totalComIVA').innerText;
+    const portes = document.getElementById('portesSemIva').innerText;
+
+    // Constrói a mensagem em formato de texto
+    const texto = `Bom dia,\n\nGostaria de avançar com o seguinte orçamento da Rack Eco (Carga Leve):\n\n${linhasTexto.join('\n')}\n\nPortes (s/ IVA): € ${portes}\nTotal (com IVA 23%): € ${total}\n\nFico a aguardar contacto.`;
+
+    const assunto = encodeURIComponent('Pedido de orçamento - Rack Eco');
+    const corpo = encodeURIComponent(texto);
+    
+    // Abre a app de e-mail do cliente
+    window.location.href = `mailto:comercial@agraracks.com?subject=${assunto}&body=${corpo}`;
+  }
+  </script>
+</body>
+</html>
