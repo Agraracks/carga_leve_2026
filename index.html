@@ -10,8 +10,8 @@
       --card:#111a2f;
       --muted:#9aa0a6;
       --text:#e5e7eb;
-      --brand:#ff6100; /* Cor Laranja atualizada */
-      --brand-hover:#e05500; /* Laranja um pouco mais escuro para o hover */
+      --brand:#ff6100;
+      --brand-hover:#e05500;
       --line:#1d2740;
       --danger:#ef4444;
       --radius:18px;
@@ -27,7 +27,6 @@
     .hero{padding:16px}
     .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
     .hero .card{padding:18px}
-    /* Cores da badge adaptadas para o tema laranja */
     .badge{display:inline-block;background:rgba(255,97,0,.15);color:#ff9852;border:1px solid rgba(255,97,0,.35);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.2px}
     h1{margin:10px 0 6px;font-size:22px;line-height:1.2}
     .subtitle{margin:0;color:var(--muted);font-size:14px}
@@ -56,7 +55,6 @@
     .tot-row{display:flex;align-items:center;justify-content:space-between;font-size:14px;color:#cbd5e1}
     .tot-row.small{font-size:12px;color:var(--muted)}
     .tot-row.strong{font-weight:700}
-    /* Fundo da linha de portes adaptado ao laranja */
     .tot-row.portes{background:rgba(255,97,0,.08);border-radius:12px;padding:10px 12px}
     .tot-row strong{font-size:16px}
     .sticky-bar{position:fixed;left:0;right:0;bottom:0;background:rgba(17,26,47,.95);border-top:1px solid var(--line);backdrop-filter:blur(8px)}
@@ -65,6 +63,20 @@
     .sticky-sub{font-size:12px;color:var(--muted)}
     .mt-8{margin-top:8px}
     .mt-12{margin-top:12px}
+    textarea#orcamentoTexto{
+      width:100%;
+      margin-top:12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#0c1220;
+      color:var(--text);
+      padding:12px;
+      font-family:inherit;
+      font-size:14px;
+      min-height:220px;
+      resize:vertical;
+      white-space:pre-wrap;
+    }
   </style>
 </head>
 <body>
@@ -178,19 +190,26 @@
       </div>
     </section>
 
+    <h3 class="section-title">Texto de orçamento (copiar e colar no e-mail)</h3>
+    <section class="card" style="margin: 0 16px 16px; padding: 14px;">
+      <p class="hint" style="margin:0 0 10px 0;">Clique em "Gerar Texto" para criar a proposta baseada nos itens adicionados.</p>
+      <button class="btn btn-primary" type="button" onclick="gerarTextoOrcamento()">Gerar Texto</button>
+      <textarea id="orcamentoTexto" readonly></textarea>
+    </section>
+
     <div class="sticky-bar">
       <div class="sticky-inner">
         <div>
           <div class="sticky-total">Total: € <span id="totalComIVASummary">0.00</span></div>
           <div class="sticky-sub">Portes: € <span id="portesSemIvaSummary">0.00</span> (s/ IVA)</div>
         </div>
-        <button class="btn btn-primary" type="button" onclick="enviarOrcamento()">Avançar com orçamento</button>
+        <button class="btn btn-primary" type="button" onclick="enviarOrcamentoMailApp()">Avançar com orçamento</button>
       </div>
     </div>
   </div>
 
   <script>
-  // TABELA DE PORTES (Já atualizada em +9,5% com teto de 2 casas decimais)
+  // TABELA DE PORTES 
   const FRETE_RULES = [
     {min:0.0, max:40.0, price:17.98},
     {min:41.0, max:50.0, price:19.97},
@@ -226,7 +245,7 @@
     return 0;
   }
 
-  // TABELA DE CAPACIDADES Carga Leve (Refinada pelo PDF)
+  // TABELA DE CAPACIDADES Carga Leve
   const capNivel = {
     "1000": {"300": 136, "340": 136, "400": 136, "500": 182, "600": 182, "680": 182, "800": 198, "1000": 198},
     "1250": {"300": 114, "340": 114, "400": 114, "500": 152, "600": 152, "680": 152, "800": 178, "1000": 178},
@@ -240,16 +259,15 @@
     document.getElementById('capacidadeNivelInfo').innerText = capacidade;
   }
   
-  // Atualiza a capacidade quando se altera o menu
   document.getElementById('comprimento').addEventListener('change', atualizarCapacidadeUI);
   document.getElementById('largura').addEventListener('change', atualizarCapacidadeUI);
   window.addEventListener('DOMContentLoaded', atualizarCapacidadeUI);
 
-  // PESOS (mantidos intactos)
+  // PESOS 
   const bastPeso = {"1000": 1.68, "1200": 2.16, "1400": 2.38, "1600": 2.64, "1800": 3.0, "2000": 3.34, "2200": 3.68, "2400": 4.0, "2600": 4.34, "2800": 4.66, "3000": 5.0};
   const nivPeso  = {"1000": {"300": 2.15, "340": 2.19, "400": 2.25, "500": 2.94, "600": 3.04, "680": 3.12, "800": 3.93, "1000": 5.38}, "1250": {"300": 2.6, "340": 2.64, "400": 2.7, "500": 3.54, "600": 3.64, "680": 3.72, "800": 4.68, "1000": 6.28}, "1500": {"300": 3.03, "340": 3.07, "400": 3.13, "500": 4.12, "600": 4.22, "680": 4.3, "800": 5.41, "1000": 7.16}};
 
-  // PREÇOS JÁ ATUALIZADOS EM +9,5% (e arredondados para cima na 2ª casa decimal)
+  // PREÇOS JÁ ATUALIZADOS EM +9,5%
   const bastPreco= {"1000": 9.02, "1200": 10.24, "1400": 11.45, "1600": 12.76, "1800": 14.04, "2000": 15.26, "2200": 16.48, "2400": 17.78, "2600": 19.00, "2800": 20.26, "3000": 21.51};
   const nivPreco = {
     "1000": {"300": 11.57, "340": 11.78, "400": 12.03, "500": 14.46, "600": 14.95, "680": 15.39, "800": 17.88, "1000": 23.07},
@@ -272,7 +290,6 @@
     const niveis = parseInt(document.getElementById('qtdNiveis').value);
     const qtd    = parseInt(document.getElementById('qtdModulos').value);
 
-    // Identificar a capacidade atual
     const capacidade = (capNivel[comp] && capNivel[comp][larg]) || '--';
 
     const pesoB = (bastPeso[alt]) || 0;
@@ -328,40 +345,70 @@
     document.getElementById('totalComIVASummary').innerText = totalComIva.toFixed(2);
   }
 
-  function enviarOrcamento() {
-    // Pega as linhas da tabela e converte num texto limpo para o e-mail
+  // Função para a Caixa de Texto na Página (Igual à imagem)
+  function gerarTextoOrcamento(){
     const rows = document.querySelectorAll('#orcamentoTable tbody tr');
-    let linhasTexto = [];
     
-    if(rows.length === 0) {
-      alert("Adicione pelo menos um item ao orçamento.");
+    if(rows.length === 0){
+      alert('Adicione pelo menos um item ao orçamento.');
       return;
     }
 
+    let alts = new Set();
+    let comps = new Set();
+    let largs = new Set();
+    let caps = new Set();
+    let linhasModulos = [];
+
     rows.forEach(tr => {
       const tds = tr.querySelectorAll('td');
-      const tipo = tds[0].innerText;
-      const alt = tds[1].innerText;
-      const comp = tds[2].innerText;
-      const larg = tds[3].innerText;
+      const tipo = tds[0].innerText.toLowerCase(); 
+      // Conversão de 2.00m -> 2000 mm para ficar igual ao seu print
+      const alt = Math.round(parseFloat(tds[1].innerText) * 1000);
+      const comp = Math.round(parseFloat(tds[2].innerText) * 1000);
+      const larg = Math.round(parseFloat(tds[3].innerText) * 1000);
       const niveis = tds[4].innerText;
       const capacidade = tds[5].innerText;
       const qtd = tds[6].innerText;
       const precoUnit = tds[7].innerText;
 
-      linhasTexto.push(`${qtd}x - Módulo ${tipo} | Medidas: ${alt}A x ${comp}C x ${larg}L | ${niveis} níveis (${capacidade}kg/nível) - € ${precoUnit}/unid`);
+      alts.add(alt);
+      comps.add(comp);
+      largs.add(larg);
+      caps.add(capacidade);
+
+      linhasModulos.push(`${qtd} - módulo ${tipo} C${comp}mm - ${precoUnit} €/unid`);
     });
 
-    const total = document.getElementById('totalComIVA').innerText;
-    const portes = document.getElementById('portesSemIva').innerText;
+    // Se tiver vários tamanhos diferentes, agrupa como "Diversos"
+    const A = alts.size === 1 ? [...alts][0] : 'Diversos';
+    const C = comps.size === 1 ? [...comps][0] : 'Diversos';
+    const P = largs.size === 1 ? [...largs][0] : 'Diversos';
+    const Cap = caps.size === 1 ? [...caps][0] : 'Diversos';
 
-    // Constrói a mensagem em formato de texto
-    const texto = `Bom dia,\n\nGostaria de avançar com o seguinte orçamento da Rack Eco (Carga Leve):\n\n${linhasTexto.join('\n')}\n\nPortes (s/ IVA): € ${portes}\nTotal (com IVA 23%): € ${total}\n\nFico a aguardar contacto.`;
+    const subtotal = parseFloat(document.getElementById('totalPreco').innerText);
+    const portesNum = parseFloat(document.getElementById('portesSemIva').innerText);
+    const portesFormated = portesNum.toFixed(2).replace('.', ',');
+    const valorTotalSemIVA = (subtotal + portesNum).toFixed(2).replace('.', ',');
+
+    const texto = `Bom dia,\n\nConforme solicitado, envio-lhe abaixo a proposta. No ficheiro em anexo encontrará os detalhes do tipo de material.\n\n${A} x ${C} x ${P} mm, chão + níveis - ${Cap} kg por nível:\n\n${linhasModulos.join('\n')}\n\nTransporte: ${portesFormated} € + IVA \n\nValor total - ${valorTotalSemIVA} € + IVA \n\nPrazo de entrega: de 7 a 15 dias úteis após a adjudicação. \n\nFico à disposição para qualquer esclarecimento e aguardo a sua resposta.`;
+
+    const area = document.getElementById('orcamentoTexto');
+    area.value = texto;
+    area.focus();
+    area.select(); // Deixa o texto já selecionado para ser mais fácil de copiar
+  }
+
+  // Mantive esta função caso o botão da barra de baixo seja clicado
+  function enviarOrcamentoMailApp() {
+    gerarTextoOrcamento();
+    const textoGerado = document.getElementById('orcamentoTexto').value;
+    
+    if (textoGerado.trim() === "") return;
 
     const assunto = encodeURIComponent('Pedido de orçamento - Rack Eco');
-    const corpo = encodeURIComponent(texto);
+    const corpo = encodeURIComponent(textoGerado);
     
-    // Abre a app de e-mail do cliente
     window.location.href = `mailto:comercial@agraracks.com?subject=${assunto}&body=${corpo}`;
   }
   </script>
